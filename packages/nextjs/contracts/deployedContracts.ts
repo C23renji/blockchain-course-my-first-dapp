@@ -285,7 +285,7 @@ const deployedContracts = {
       deployedOnBlock: 2680055,
     },
     Escrow: {
-      address: "0x1E45D62F14Ad959Fb2c45A8f5f20d4695d5A6A98",
+      address: "0x9Db5e2346097cA7DA3BC0a5671d644273Fd2D273",
       abi: [
         {
           inputs: [
@@ -611,7 +611,7 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 2673046,
+      deployedOnBlock: 2680964,
     },
     YourContract: {
       address: "0xfC3983DE3F7cBe1Ba01084469779470AD0BbeFfa",
