@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   60600: {
     CMHToken: {
-      address: "0x58F0bF13c7187727dE659cf1295172c4d0D9c130",
+      address: "0x9E8C3a80D389378d88EF429b4454bD69e9e3B522",
       abi: [
         {
           inputs: [],
@@ -282,7 +282,7 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 2673045,
+      deployedOnBlock: 2680055,
     },
     Escrow: {
       address: "0x1E45D62F14Ad959Fb2c45A8f5f20d4695d5A6A98",

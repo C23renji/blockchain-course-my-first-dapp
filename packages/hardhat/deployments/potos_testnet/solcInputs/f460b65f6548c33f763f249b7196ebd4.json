@@ -1,0 +1,36 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "contracts/CMHToken.sol": {
+      "content": "// SPDX-License-Identifier: MIT\npragma solidity >=0.8.0 <0.9.0;\ncontract CMHToken {\n    // ---------- 元数据 ----------\n    string public name = \"CMHToken\";\n    string public symbol = \"CMH202430550166\";\n    uint8 public decimals = 18;\n    uint256 public totalSupply;\n    // ---------- 权限 ----------\n    address public owner;\n    modifier onlyOwner() {\n        require(msg.sender == owner, \"CMHToken: caller is not the owner\");\n        _;\n    }\n    // ---------- 状态 ----------\n    // 这两个 mapping 就是\"账本\"。代币不存在于任何钱包里，只存在于这里。\n    mapping(address => uint256) private _balances;\n    mapping(address => mapping(address => uint256)) private _allowances;\n    // ---------- 事件 ----------\n    event Transfer(address indexed from, address indexed to, uint256 value);\n    event Approval(\n        address indexed owner,\n        address indexed spender,\n        uint256 value\n    );\n    constructor() {\n        owner = msg.sender;\n    }\n    // ---------- 只读查询 ----------\n    function balanceOf(address account) public view returns (uint256) {\n        return _balances[account];\n    }\n    function allowance(\n        address _owner,\n        address spender\n    ) public view returns (uint256) {\n        return _allowances[_owner][spender];\n    }\n    // ---------- TODO 1：转账 ----------\n    // 要求：to 不能是零地址；msg.sender 余额必须足够；\n    // 扣 msg.sender、加 to；发出 Transfer 事件；返回 true。\n    function transfer(address to, uint256 value) public returns (bool) {\n        require(to != address(0), \"CMHToken: transfer to zero address\");\n        require(\n            _balances[msg.sender] >= value,\n            \"CMHToken: insufficient balance balance\"\n        );\n\n        _balances[msg.sender] -= value;\n        _balances[to] += value;\n\n        emit Transfer(msg.sender, to, value);\n        return true;\n    }\n    // ---------- TODO 2：授权 ----------\n    // 要求：记录 msg.sender 允许 spender 花 value；发出 Approval 事件；返回 true。\n    function approve(address spender, uint256 value) public returns (bool) {\n        require(spender != address(0), \"CMHToken: transfer to zero address\");\n\n        _allowances[msg.sender][spender] = value;\n\n        emit Approval(msg.sender, spender, value);\n        return true;\n    }\n    // ---------- TODO 3：代扣转账 ----------\n    // 要求：from 的余额必须足够；msg.sender 在 from 处的额度必须足够；\n    // 额度减 value；扣 from、加 to；发出 Transfer 事件；返回 true。\n    function transferFrom(\n        address from,\n        address to,\n        uint256 value\n    ) public returns (bool) {\n        require(from != address(0), \"CMHToken: transfer from zero address\");\n        require(to != address(0), \"CMHToken: transfer to zero address\");\n        require(_balances[from] >= value, \"CMHToken: insufficient balance\");\n        require(\n            _allowances[from][msg.sender] >= value,\n            \"CMHToken: insufficient allowance\"\n        );\n\n        _allowances[from][msg.sender] -= value;\n        _balances[from] -= value;\n        _balances[to] += value;\n\n        emit Transfer(from, to, value);\n        return true;\n    }\n    // ---------- TODO 4：增发（只有 owner 能调） ----------\n    // 要求：to 不能是零地址；totalSupply 加 value；to 余额加 value；\n    // 发出 Transfer 事件，from 填 address(0)。\n    function mint(address to, uint256 value) public onlyOwner {\n        require(to != address(0), \"CMHToken: transfer to zero address\");\n\n        totalSupply += value;\n        _balances[to] += value;\n\n        emit Transfer(address(0), to, value);\n    }\n    // ---------- TODO 5：销毁自己的代币 ----------\n    // 要求：msg.sender 余额必须足够；余额减 value；totalSupply 减 value；\n    // 发出 Transfer 事件，to 填 address(0)。\n    function burn(uint256 value) public {\n        require(\n            _balances[msg.sender] >= value,\n            \"CMHToken: insufficient balance\"\n        );\n\n        _balances[msg.sender] -= value;\n        totalSupply -= value;\n\n        emit Transfer(msg.sender, address(0), value);\n    }\n}\n"
+    }
+  },
+  "settings": {
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "evmVersion": "paris",
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata",
+          "devdoc",
+          "userdoc",
+          "storageLayout",
+          "evm.gasEstimates"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    },
+    "metadata": {
+      "useLiteralContent": true
+    }
+  }
+}

@@ -2,17 +2,15 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 
+// 本轮仲裁人 C 的钱包地址
+const ARBITER = "0xbfe92fd3064502e0F4218879FFBcEA282775133B";
+
 const deployEscrow: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await hre.getNamedAccounts();
-  const arbiter = process.env.ESCROW_ARBITER ?? "";
-
-  if (!hre.ethers.isAddress(arbiter) || arbiter === hre.ethers.ZeroAddress) {
-    throw new Error("请在当前终端 export ESCROW_ARBITER=<有效仲裁人地址>");
-  }
 
   await hre.deployments.deploy("Escrow", {
     from: deployer,
-    args: [arbiter],
+    args: [ARBITER],
     log: true,
     autoMine: true,
   });
